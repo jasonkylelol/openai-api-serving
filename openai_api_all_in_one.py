@@ -21,8 +21,7 @@ MAX_MODEL_LENGTH = 1024 * 16
 EventSourceResponse.DEFAULT_PING_INTERVAL = 1000
 
 svr, llm_app, embedding_app = None, App, None
-llm_router = APIRouter()
-embedding_router = APIRouter()
+router = APIRouter()
 
 def llm_init():
     tensor_parallel_size = torch.cuda.device_count()
@@ -66,22 +65,22 @@ def embedding_init():
     embedding_app = EmbeddingApp(EMBEDDING_MODEL_PATH)
 
 
-@llm_router.get("/health")
+@router.get("/health")
 async def health() -> Response:
     return await llm_app.health()
 
 
-@llm_router.get("/v1/models", response_model=ModelList)
+@router.get("/v1/models", response_model=ModelList)
 async def list_models():
     return await llm_app.list_models()
 
 
-@llm_router.post("/v1/chat/completions", response_model=ChatCompletionResponse)
+@router.post("/v1/chat/completions", response_model=ChatCompletionResponse)
 async def create_chat_completion(request: ChatCompletionRequest):
     return await llm_app.create_chat_completion(request)
 
 
-@embedding_router.post("/v1/embeddings", response_model=CreateEmbeddingResponse)
+@router.post("/v1/embeddings", response_model=CreateEmbeddingResponse)
 async def create_embedding(request: CreateEmbeddingRequest):
     return await embedding_app.create_embedding(request)
 
@@ -98,13 +97,12 @@ def handler():
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    app.include_router(llm_router)
-    app.include_router(embedding_router)
+    app.include_router(router)
 
     host = "0.0.0.0"
     config = uvicorn.Config(app=app, host=host, port=SERVER_PORT)
-    global svr
 
+    global svr
     svr = uvicorn.Server(config)
     print(f"[AllInOne] start api server on {host}:{SERVER_PORT}", flush=True)
     svr.run()
@@ -121,6 +119,9 @@ async def lifespan(app: FastAPI):
 if __name__ == "__main__":
     def signal_handler(sig, frame):
         print("[Main] shutting down...", flush=True)
+        global llm_app, embedding_app, svr
+        del llm_app
+        del embedding_app
         if svr: svr.should_exit = True
 
     signal.signal(signal.SIGINT, signal_handler)
