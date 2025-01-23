@@ -136,13 +136,13 @@ class Qwen2App(App):
             for usage_key, usage_value in task_usage.model_dump().items():
                 setattr(usage, usage_key, getattr(usage, usage_key) + usage_value)
 
-            if delta_text.strip() == "<think>":
-                think_skip = True
-            elif delta_text.strip() == "</think>":
-                think_skip = False
-                continue
-            if think_skip:
-                continue
+            # if delta_text.strip() == "<think>":
+            #     think_skip = True
+            # elif delta_text.strip() == "</think>":
+            #     think_skip = False
+            #     continue
+            # if think_skip:
+            #     continue
 
             message = DeltaMessage(
                     content=delta_text,
@@ -165,7 +165,7 @@ class Qwen2App(App):
             )
             yield chunk.model_dump_json(exclude_unset=True)
 
-        cleaned_content = re.sub(r'<think>.*?</think>', "", generate_text, flags=re.DOTALL)
-        print(f"----- response -----\n{cleaned_content}\n", flush=True)
+        # generate_text = re.sub(r'<think>.*?</think>', "", generate_text, flags=re.DOTALL)
+        print(f"----- response -----\n{generate_text}\n", flush=True)
         # gc.collect()
         # torch.cuda.empty_cache()
