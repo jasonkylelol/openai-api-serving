@@ -20,10 +20,9 @@ BGE_ZH_QUERY_INSTRUCTION = "为这个句子生成表示以用于检索相关文�
 class EmbeddingApp:
     def __init__(self, model_path):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        print(f"Using device: {device}", flush=True)
 
         self.model_name = model_path
-        print(f"Loading embedding model: {self.model_name}", flush=True)
+        print(f"Loading embedding device: {device} model: {self.model_name}", flush=True)
         encode_kwargs = {
             "normalize_embeddings": NORMALIZE_EMBEDDINGS
         }
@@ -87,4 +86,3 @@ class EmbeddingApp:
                 object='list',
                 usage=UsageInfo(prompt_tokens=total_tokens, total_tokens=total_tokens)
             )
-

@@ -4,7 +4,7 @@ import threading
 from datetime import datetime
 
 api_key = "EMPTY"
-model = "glm-4-flash"
+model = "deepseek-r1"
 server_addr = os.getenv("SERVER_ADDR")
 
 def init_client():
@@ -20,7 +20,7 @@ def generate_content_streaming(client: OpenAI):
         model=model,
         messages=[ 
             {"role": "system", "content": "你总是使用嘻哈风格回答问题，回答中带有emoji表情"},
-            {"role": "user", "content": "如何使用牙膏刷牙"},
+            {"role": "user", "content": "如何使用洗发水刷牙"},
         ],
         temperature=0.6,
         max_tokens=2048,

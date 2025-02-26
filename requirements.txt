@@ -12,3 +12,4 @@ pydantic
 asyncio
 sse_starlette
 vllm-flash-attn
+accelerate

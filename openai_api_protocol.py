@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional, Union
+from typing import List, Literal, Optional, Union, Dict
 from pydantic import BaseModel, Field
 import time
 import random
@@ -121,6 +121,30 @@ class CreateEmbeddingResponse(BaseModel):
     data: List[Embedding]
     model: str
     usage: UsageInfo
+
+
+class RerankRequest(BaseModel):
+    model: str
+    query: str
+    documents: List[str]
+    top_n: Optional[int] = None
+    return_documents: bool = True
+
+
+class RerankDoc(BaseModel):
+    text: str
+
+
+class RerankResult(BaseModel):
+    index: int
+    document: RerankDoc
+    relevance_score: float
+
+
+class RerankResponse(BaseModel):
+    model: str
+    usage: Optional[Dict] = None
+    results: List[RerankResult]
 
 
 def generate_id(prefix: str, k=29) -> str:
