@@ -4,13 +4,6 @@ import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from openai_api_protocol import RerankRequest, RerankResponse, RerankResult, RerankDoc
 
-
-NORMALIZE_EMBEDDINGS = "1"
-E5_EMBED_INSTRUCTION = "passage: "
-E5_QUERY_INSTRUCTION = "query: "
-BGE_EN_QUERY_INSTRUCTION = "Represent this sentence for searching relevant passages: "
-BGE_ZH_QUERY_INSTRUCTION = "为这个句子生成表示以用于检索相关文章："
-
 class RerankApp:
     def __init__(self, model_path):
         if torch.cuda.is_available():
