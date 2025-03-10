@@ -40,7 +40,6 @@ def llm_init():
         trust_remote_code=True,
         gpu_memory_utilization=0.9,
         enforce_eager=True,
-        worker_use_ray=False,
         disable_log_requests=True,
         max_model_len=MAX_MODEL_LENGTH,
         enable_chunked_prefill=True,
