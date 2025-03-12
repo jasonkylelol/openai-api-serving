@@ -64,15 +64,17 @@ def llm_init():
 def embedding_init():
     global embedding_app
 
-    from openai_api_embedding_app import EmbeddingApp
-    embedding_app = EmbeddingApp(EMBEDDING_MODEL_PATH)
+    if os.path.exists(EMBEDDING_MODEL_PATH):
+        from openai_api_embedding_app import EmbeddingApp
+        embedding_app = EmbeddingApp(EMBEDDING_MODEL_PATH)
 
 
 def rerank_init():
     global rerank_app
 
-    from openai_api_rerank_app import RerankApp
-    rerank_app = RerankApp(RERANK_MODEL_PATH)
+    if os.path.exists(RERANK_MODEL_PATH):
+        from openai_api_rerank_app import RerankApp
+        rerank_app = RerankApp(RERANK_MODEL_PATH)
 
 
 @router.get("/health")
@@ -92,11 +94,15 @@ async def create_chat_completion(request: ChatCompletionRequest):
 
 @router.post("/v1/embeddings", response_model=CreateEmbeddingResponse)
 async def create_embedding(request: CreateEmbeddingRequest):
+    if not os.path.exists(EMBEDDING_MODEL_PATH):
+        raise HTTPException(status_code=404, detail="embedding model not found")
     return await embedding_app.create_embedding(request)
 
 
 @router.post("/v1/rerank", response_model=RerankResponse)
 async def rerank(request: RerankRequest):
+    if not os.path.exists(RERANK_MODEL_PATH):
+        raise HTTPException(status_code=404, detail="rerank model not found")
     return await rerank_app.rerank(request)
 
 

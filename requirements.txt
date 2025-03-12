@@ -1,8 +1,10 @@
---index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+--index-url https://mirrors.aliyun.com/pypi/simple
 
-torch==2.3.1
-transformers==4.44.2
-vllm==0.5.3.post1
+torch==2.5.1
+vllm==0.7.3
+transformers==4.49.0
+accelerate==1.0.1
 uvicorn
 fastapi
 langchain
@@ -11,5 +13,3 @@ langchain_community
 pydantic
 asyncio
 sse_starlette
-vllm-flash-attn
-accelerate
